@@ -1,0 +1,27 @@
+{% load i18n %}
+
+{% block subject %}
+Account activation - CV Asker
+{% endblock subject %}
+
+{% block text_body %}
+You're receiving this email because you need to finish the activation process on CV Asker.
+
+Please go to the following page to activate your account:
+{{ url|safe }}
+
+Thanks for using our site!
+
+CV Asker Team
+{% endblock text_body %}
+
+{% block html_body %}
+<p>You're receiving this email because you need to finish the activation process on CV Asker.</p>
+
+<p>Please go to the following page to activate your account:</p>
+<p><a href="{{ url|safe }}">{{ url|safe }}</a></p>
+
+<p>Thanks for using our site!</p>
+
+<p>CV Asker Team</p>
+{% endblock html_body %}
