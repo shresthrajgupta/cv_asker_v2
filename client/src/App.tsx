@@ -1,35 +1,43 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+// typescript applied
+import { useState, useEffect } from 'react';
+import { Outlet, useLocation, type Location } from "react-router-dom";
+import { ToastContainer, Slide } from 'react-toastify';
 
-function App() {
-  const [count, setCount] = useState(0)
+import { useAppSelector } from './hooks/hooks';
 
-  return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
-}
+import Header from './components/Header';
 
-export default App
+import { backgroundColorTheme, textColorTheme } from './utils/themeUtil';
+
+const App = () => {
+    const location: Location = useLocation();
+
+    const [height, setHeight] = useState<number>(0);
+    const [isAuthPage, setIsAuthPage] = useState<boolean>(true);
+
+    const themeMode = useAppSelector((state) => state.theme.themeMode);
+
+    useEffect((): void => {
+        setHeight(window.innerHeight);
+
+        const authRoutes: string[] = ['/', '/login', '/signup'] as const;
+        setIsAuthPage(authRoutes.includes(location.pathname) || location.pathname.startsWith('/activate'));
+    }, [location.pathname]);
+
+    return (
+        <>
+            <main className={`${backgroundColorTheme[themeMode]} ${textColorTheme[themeMode]}`} style={{ height: height }}>
+                {!isAuthPage && <Header />}
+
+                <div style={{ height: isAuthPage ? height : height - 56, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                    < Outlet />
+                </div>
+
+            </main>
+
+            <ToastContainer position="top-center" transition={Slide} hideProgressBar autoClose={1500} />
+        </>
+    )
+};
+
+export default App;
