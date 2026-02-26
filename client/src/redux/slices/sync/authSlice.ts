@@ -1,10 +1,10 @@
 // typescript applied
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 
-import { type userAccountInfoInterface } from "../async/usersApiSlice";
+import { type userAccountInfoSuccessResponse } from "../async/usersApiSlice";
 
 interface AuthState {
-    userInfo: userAccountInfoInterface | null;
+    userInfo: userAccountInfoSuccessResponse | null;
 }
 
 const initialState: AuthState = {
@@ -15,7 +15,7 @@ const authSlice = createSlice({
     name: "auth",
     initialState,
     reducers: {
-        setCredentials: (state, action: PayloadAction<userAccountInfoInterface>) => {
+        setCredentials: (state, action: PayloadAction<userAccountInfoSuccessResponse>) => {
             state.userInfo = action.payload;
         },
 

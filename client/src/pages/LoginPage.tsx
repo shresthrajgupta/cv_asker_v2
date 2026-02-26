@@ -1,7 +1,9 @@
+// typescript implemented
 import { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { toast } from "react-toastify";
-import { type FetchBaseQueryError } from "@reduxjs/toolkit/query";
+
+import { type GetAccessTokenErrorResponse, type LoginErrorResponse } from '../redux/slices/async/usersApiSlice';
 
 import { useAppSelector, useAppDispatch } from '../hooks/hooks';
 
@@ -12,11 +14,20 @@ import Loading from '../components/Loading';
 
 import { useLoginMutation, useLazyUserAccountInfoQuery, useGetAccessTokenMutation } from '../redux/slices/async/usersApiSlice';
 
-import { setAccessToken } from '../redux/slices/sync/accessTokenSlice.js';
-import { setCredentials } from '../redux/slices/sync/authSlice.js';
+import { setAccessToken } from '../redux/slices/sync/accessTokenSlice';
+import { setCredentials } from '../redux/slices/sync/authSlice';
 
 import { contentBackgroundColor, sectionTitleTheme, textInputBorderColorTheme, textInputBorderColorFocusedTheme, textInputBackgroundColorTheme, toastBackgroundTheme, toastTextTheme } from '../utils/themeUtil';
+import { isFetchBaseQueryError } from '../utils/errorUtil';
 
+
+function isAccessTokenErrorResponse(data: unknown): data is GetAccessTokenErrorResponse {
+    return (typeof data === "object" && data !== null && ("message" in data || "status" in data || "detail" in data || "code" in data));
+}
+
+function isLoginErrorResponse(data: unknown): data is LoginErrorResponse {
+    return (typeof data === "object" && data !== null && ("email" in data || "password" in data || "detail" in data));
+}
 
 const LoginPage = () => {
     const navigate = useNavigate();
@@ -33,29 +44,7 @@ const LoginPage = () => {
     const { userInfo } = useAppSelector((state) => state.auth);
     const { themeMode } = useAppSelector((state) => state.theme);
 
-    useEffect(() => {
-        const tryLogin = async () => {
-            const accessTokenResponse = await getAccessToken().unwrap();
-
-            if (accessTokenResponse.access) {
-                dispatch(setAccessToken(accessTokenResponse.access));
-
-                const userAccountInfo = await userAccount(accessTokenResponse.access).unwrap();
-
-                dispatch(setCredentials({ ...userAccountInfo }));
-            }
-        };
-
-        tryLogin();
-    }, []);
-
-    useEffect(() => {
-        if (userInfo) {
-            navigate('/home');
-        }
-    }, [userInfo]);
-
-    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>): Promise<void> => {
+    const handleSubmit = async (e: React.SubmitEvent<HTMLFormElement>): Promise<void> => {
         e.preventDefault();
 
         setIsError(false);
@@ -77,24 +66,49 @@ const LoginPage = () => {
 
             const userAccountInfo = await userAccount(res.access).unwrap();
             dispatch(setCredentials({ ...userAccountInfo }));
-
-            navigate("/home");
-        } catch (err) {
-            const error = err as FetchBaseQueryError;
-
-            if (error.status && (typeof error.status === "number") && (Math.floor(error.status / 100) === 4)) {
-                toast.error("Incorrect username or password",
-                    { style: { background: toastBackgroundTheme[themeMode], color: toastTextTheme[themeMode] } }
-                )
+        } catch (err: unknown) {
+            if (isFetchBaseQueryError(err)) {
+                if (isLoginErrorResponse(err.data)) {
+                    toast.error("Invalid email or password", { style: { background: toastBackgroundTheme[themeMode], color: toastTextTheme[themeMode] } });
+                    setIsError(true);
+                    return;
+                }
+                console.log("Error in login: ", err)
             }
-            else {
-                console.log("login page handleSubmit error", error);
-                toast.error("Internal server error, please try again later",
-                    { style: { background: toastBackgroundTheme[themeMode], color: toastTextTheme[themeMode] } }
-                )
-            }
+
+            console.log("Internal server error in login: ", err)
         }
     };
+
+    useEffect(() => {
+        const tryLogin = async () => {
+            try {
+                const accessTokenResponse = await getAccessToken().unwrap();
+                dispatch(setAccessToken(accessTokenResponse.access));
+
+                const userAccountInfo = await userAccount(accessTokenResponse.access).unwrap();
+                dispatch(setCredentials({ ...userAccountInfo }));
+            }
+            catch (err: unknown) {
+                if (isFetchBaseQueryError(err)) {
+                    if (isAccessTokenErrorResponse(err.data)) {
+                        console.log("Invalid token for refresh token");
+                        return;
+                    }
+                }
+
+                console.log("Internal server error in automatic login: ", err)
+            }
+        };
+
+        tryLogin();
+    }, [dispatch, getAccessToken, userAccount]);
+
+    useEffect(() => {
+        if (userInfo) {
+            navigate('/home');
+        }
+    }, [userInfo, navigate]);
 
     return (
         (userAccountInfoFetching || getAccessTokenLoading) ? <Loading size={70} /> :

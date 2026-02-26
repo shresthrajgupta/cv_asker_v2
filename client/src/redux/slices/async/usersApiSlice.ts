@@ -1,47 +1,78 @@
 import { apiSlice } from "./apiSlice";
 
-export interface userAccountInfoInterface {
+
+interface SignupSuccessResponse {
+    email: string;
+    id: number;
+};
+export interface SignupErrorResponse {
+    email?: string[];
+    password?: string[];
+    re_password?: string[];
+    non_field_errors?: string[];
+};
+
+
+export interface VerifyAccountErrorResponse {
+    uid?: string[];
+    token?: string[];
+}
+
+
+interface LoginSuccessResponse {
+    access: string;
+};
+export interface LoginErrorResponse {
+    email?: string[]
+    password?: string[]
+    detail?: string
+};
+
+
+export interface userAccountInfoSuccessResponse {
     id: number;
     name: string;
     email: string;
-    is_active: boolean
+    is_active: boolean;
 }
 
-// ================= REQUEST TYPES =================
 
-interface SignupRequest {
-    email: string;
-    password: string;
-    re_password: string;
+
+
+interface GetAccessTokenSuccessResponse {
+    access: string;
+}
+export interface GetAccessTokenErrorResponse {
+    message?: string;
+    status?: number;
+    detail?: string;
+    code?: string;
 }
 
-interface VerifyAccountRequest {
-    uid: string;
-    token: string;
-}
 
-interface SetNewPasswordRequest {
-    uid: string;
-    token: string;
-    password: string;
-    rePassword: string;
-}
 
-interface UpdateUserRequest {
-    name: string;
-    accessToken: string;
-}
+// interface SetNewPasswordRequest {
+//     uid: string;
+//     token: string;
+//     password: string;
+//     rePassword: string;
+// }
 
-interface DeleteUserRequest {
-    password: string;
-    accessToken: string;
-}
+// interface UpdateUserRequest {
+//     name: string;
+//     accessToken: string;
+// }
+
+// interface DeleteUserRequest {
+//     password: string;
+//     accessToken: string;
+// }
 
 
 export const usersApiSlice = apiSlice.injectEndpoints({
     endpoints: (builder) => ({
-
-        signup: builder.mutation<void, SignupRequest>({
+        // implemented
+        signup: builder.mutation<SignupSuccessResponse, { email: string; password: string; re_password: string; }>({
             query: (body) => ({
                 url: "/api/auth/users/",
                 method: "POST",
@@ -49,7 +80,8 @@ export const usersApiSlice = apiSlice.injectEndpoints({
             }),
         }),
 
-        verifyAccount: builder.mutation<void, VerifyAccountRequest>({
+        // implemented
+        verifyAccount: builder.mutation<void, { uid: string; token: string; }>({
             query: (body) => ({
                 url: "/api/auth/users/activation/",
                 method: "POST",
@@ -57,7 +89,8 @@ export const usersApiSlice = apiSlice.injectEndpoints({
             }),
         }),
 
-        login: builder.mutation<{ access: string; }, { email: string; password: string; }>({
+        // implemented
+        login: builder.mutation<LoginSuccessResponse, { email: string; password: string; }>({
             query: (body) => ({
                 url: "/api/auth/jwt/create/",
                 method: "POST",
@@ -82,20 +115,15 @@ export const usersApiSlice = apiSlice.injectEndpoints({
             }),
         }),
 
-        setNewPassword: builder.mutation<void, SetNewPasswordRequest>({
+        setNewPassword: builder.mutation<void, { uid: string; token: string; password: string; rePassword: string; }>({
             query: ({ uid, token, password, rePassword }) => ({
                 url: "/api/auth/users/reset_password_confirm/",
                 method: "POST",
-                body: {
-                    uid,
-                    token,
-                    new_password: password,
-                    re_new_password: rePassword,
-                },
+                body: { uid, token, new_password: password, re_new_password: rePassword, },
             }),
         }),
 
-        userAccountInfo: builder.query<userAccountInfoInterface, string>({
+        userAccountInfo: builder.query<userAccountInfoSuccessResponse, string>({
             query: (accessToken) => ({
                 url: "/api/auth/users/me/",
                 method: "GET",
@@ -106,27 +134,28 @@ export const usersApiSlice = apiSlice.injectEndpoints({
             providesTags: ["UserAccount"],
         }),
 
-        updateUserAccountInfo: builder.mutation<void, UpdateUserRequest>({
-            query: ({ name, accessToken }) => ({
-                url: "/api/auth/users/me/",
-                method: "PATCH",
-                body: { name },
-                headers: { Authorization: `JWT ${accessToken}` },
-                credentials: "include",
-            }),
-        }),
+        // updateUserAccountInfo: builder.mutation<void, UpdateUserRequest>({
+        //     query: ({ name, accessToken }) => ({
+        //         url: "/api/auth/users/me/",
+        //         method: "PATCH",
+        //         body: { name },
+        //         headers: { Authorization: `JWT ${accessToken}` },
+        //         credentials: "include",
+        //     }),
+        // }),
 
-        deleteUserAccount: builder.mutation<void, DeleteUserRequest>({
-            query: ({ password, accessToken }) => ({
-                url: "/api/auth/users/me/",
-                method: "DELETE",
-                body: { current_password: password },
-                headers: { Authorization: `JWT ${accessToken}` },
-                credentials: "include",
-            }),
-        }),
+        // deleteUserAccount: builder.mutation<void, DeleteUserRequest>({
+        //     query: ({ password, accessToken }) => ({
+        //         url: "/api/auth/users/me/",
+        //         method: "DELETE",
+        //         body: { current_password: password },
+        //         headers: { Authorization: `JWT ${accessToken}` },
+        //         credentials: "include",
+        //     }),
+        // }),
 
-        getAccessToken: builder.mutation<{ access: string }, void>({
+        // implemented
+        getAccessToken: builder.mutation<GetAccessTokenSuccessResponse, void>({
             query: () => ({
                 url: "/api/auth/jwt/refresh/",
                 method: "POST",
@@ -145,7 +174,7 @@ export const
         useResetPasswordMutation,
         useSetNewPasswordMutation,
         useLazyUserAccountInfoQuery,
-        useUpdateUserAccountInfoMutation,
-        useDeleteUserAccountMutation,
+        // useUpdateUserAccountInfoMutation,
+        // useDeleteUserAccountMutation,
         useGetAccessTokenMutation,
     } = usersApiSlice;

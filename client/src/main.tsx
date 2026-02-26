@@ -12,7 +12,7 @@ import App from './App';
 
 // import PrivateRoute from './components/PrivateRoute.jsx';
 
-// import SignUpPage from './pages/SignupPage.jsx';
+import SignUpPage from './pages/SignupPage.jsx';
 // import AccountActivatedPage from './pages/AccountActivatedPage.jsx';
 import LoginPage from './pages/LoginPage.jsx';
 // import NotFoundPage from './pages/NotFoundPage.jsx';
@@ -28,8 +28,8 @@ const router = createBrowserRouter(
     createRoutesFromElements(
         <Route path="/" element={<App />}>
             <Route index={true} path='/' element={<LoginPage />} />
-            {/* <Route path='/login' element={<LoginPage />} /> */}
-            {/* <Route path='/signup' element={<SignUpPage />} /> */}
+            <Route path='/login' element={<LoginPage />} />
+            <Route path='/signup' element={<SignUpPage />} />
             {/* <Route path='/activate/*' element={<AccountActivatedPage />} /> */}
             {/* <Route path='/password-reset/*' element={<ForgotPasswordPage />} /> */}
 
