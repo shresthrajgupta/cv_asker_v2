@@ -3,6 +3,8 @@ import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 
 import { type userAccountInfoSuccessResponse } from "../async/usersApiSlice";
 
+type AuthStateType = userAccountInfoSuccessResponse | null;
+
 interface AuthState {
     userInfo: userAccountInfoSuccessResponse | null;
 }
@@ -15,7 +17,7 @@ const authSlice = createSlice({
     name: "auth",
     initialState,
     reducers: {
-        setCredentials: (state, action: PayloadAction<userAccountInfoSuccessResponse>) => {
+        setCredentials: (state, action: PayloadAction<AuthStateType>) => {
             state.userInfo = action.payload;
         },
 

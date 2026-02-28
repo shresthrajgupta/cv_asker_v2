@@ -10,16 +10,16 @@ import './index.css';
 
 import App from './App';
 
-// import PrivateRoute from './components/PrivateRoute.jsx';
+import PrivateRoute from './components/PrivateRoute';
 
-import SignUpPage from './pages/SignupPage.jsx';
-// import AccountActivatedPage from './pages/AccountActivatedPage.jsx';
-import LoginPage from './pages/LoginPage.jsx';
+import LoginPage from './pages/LoginPage';
+import SignUpPage from './pages/SignupPage';
+import AccountActivatedPage from './pages/AccountActivatedPage';
 // import NotFoundPage from './pages/NotFoundPage.jsx';
-// import HomePage from './pages/HomePage.jsx';
+import HomePage from './pages/HomePage';
 // import UploadCVPage from './pages/UploadCVPage.jsx';
 // import AccountPage from './pages/AccountPage.jsx';
-// import ForgotPasswordPage from './pages/ForgotPasswordPage.jsx';
+import ForgotPasswordPage from './pages/ForgotPasswordPage';
 // import DeleteAccountPage from './pages/DeleteAccountPage.jsx';
 // import ProfilePage from './pages/ProfilePage.jsx';
 // import PracticePage from './pages/PracticePage.jsx';
@@ -30,17 +30,17 @@ const router = createBrowserRouter(
             <Route index={true} path='/' element={<LoginPage />} />
             <Route path='/login' element={<LoginPage />} />
             <Route path='/signup' element={<SignUpPage />} />
-            {/* <Route path='/activate/*' element={<AccountActivatedPage />} /> */}
-            {/* <Route path='/password-reset/*' element={<ForgotPasswordPage />} /> */}
+            <Route path='/activate/:uid/:token' element={<AccountActivatedPage />} />
+            <Route path='/password-reset/*' element={<ForgotPasswordPage />} />
 
-            {/* <Route path='' element={<PrivateRoute />}>
-        <Route path='/home' element={<HomePage />}></Route>
-        <Route path='/upload' element={<UploadCVPage />} />
-        <Route path='/account' element={<AccountPage />} />
-        <Route path='/profile' element={<ProfilePage />} />
-        <Route path='/delete' element={<DeleteAccountPage />} />
-        <Route path='/practice' element={<PracticePage />} />
-      </Route> */}
+            <Route path='' element={<PrivateRoute />}>
+                <Route path='/home' element={<HomePage />}></Route>
+                {/* <Route path='/upload' element={<UploadCVPage />} /> */}
+                {/* <Route path='/account' element={<AccountPage />} /> */}
+                {/* <Route path='/profile' element={<ProfilePage />} /> */}
+                {/* <Route path='/delete' element={<DeleteAccountPage />} /> */}
+                {/* <Route path='/practice' element={<PracticePage />} /> */}
+            </Route>
 
             {/* <Route path='*' element={<NotFoundPage />} /> */}
         </Route>

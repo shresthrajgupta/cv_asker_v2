@@ -28,6 +28,9 @@ export interface LoginErrorResponse {
     detail?: string
 };
 
+interface LogoutSuccessResponse {
+    message: string;
+}
 
 export interface userAccountInfoSuccessResponse {
     id: number;
@@ -49,14 +52,6 @@ export interface GetAccessTokenErrorResponse {
     code?: string;
 }
 
-
-
-// interface SetNewPasswordRequest {
-//     uid: string;
-//     token: string;
-//     password: string;
-//     rePassword: string;
-// }
 
 // interface UpdateUserRequest {
 //     name: string;
@@ -98,8 +93,9 @@ export const usersApiSlice = apiSlice.injectEndpoints({
             }),
         }),
 
-        logout: builder.mutation<void, string>({
-            query: (accessToken) => ({
+        // implemented
+        logout: builder.mutation<LogoutSuccessResponse, { accessToken: string }>({
+            query: ({ accessToken }) => ({
                 url: "/api/logout/",
                 method: "POST",
                 headers: { Authorization: `JWT ${accessToken}` },
@@ -107,6 +103,7 @@ export const usersApiSlice = apiSlice.injectEndpoints({
             }),
         }),
 
+        // implemented
         resetPassword: builder.mutation<void, string>({
             query: (email) => ({
                 url: "/api/auth/users/reset_password/",
@@ -115,6 +112,7 @@ export const usersApiSlice = apiSlice.injectEndpoints({
             }),
         }),
 
+        // implemented
         setNewPassword: builder.mutation<void, { uid: string; token: string; password: string; rePassword: string; }>({
             query: ({ uid, token, password, rePassword }) => ({
                 url: "/api/auth/users/reset_password_confirm/",
@@ -123,6 +121,7 @@ export const usersApiSlice = apiSlice.injectEndpoints({
             }),
         }),
 
+        // implemented
         userAccountInfo: builder.query<userAccountInfoSuccessResponse, string>({
             query: (accessToken) => ({
                 url: "/api/auth/users/me/",

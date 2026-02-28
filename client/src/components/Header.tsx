@@ -2,14 +2,14 @@
 import { Link } from "react-router-dom";
 import { Sun, Moon, Menu } from "lucide-react";
 
-import { useAppSelector, useAppDispatch } from "../hooks/hooks.js";
+import { useAppSelector, useAppDispatch } from "../hooks/hooks";
 
 import logo from "../assets/logo.svg";
 
 import { setTheme } from "../redux/slices/sync/themeSlice";
 import { setSidebarOpen } from "../redux/slices/sync/sidebarOpenSlice";
 
-import { navbarBackgroundColor } from "../utils/themeUtil.js";
+import { navbarBackgroundColor } from "../utils/themeUtil";
 
 
 const Header = () => {

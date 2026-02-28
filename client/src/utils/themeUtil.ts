@@ -75,7 +75,8 @@ export const navbarBackgroundColor: Theme = {
 }
 
 export const navbarItemHoverColor: Theme = {
-    light: 'hover:bg-[#16a34a]',
+    // light: 'hover:bg-[#16a34a]',
+    light: 'hover:bg-[#3ee67c]',
     dark: 'hover:bg-[#22c55e]'
 }
 
