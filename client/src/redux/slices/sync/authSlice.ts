@@ -1,12 +1,12 @@
 // typescript applied
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 
-import { type userAccountInfoSuccessResponse } from "../async/usersApiSlice";
+import { type UserAccountInfoSuccessResponse } from "../async/usersApiSlice";
 
-type AuthStateType = userAccountInfoSuccessResponse | null;
+type AuthStateType = UserAccountInfoSuccessResponse | null;
 
 interface AuthState {
-    userInfo: userAccountInfoSuccessResponse | null;
+    userInfo: UserAccountInfoSuccessResponse | null;
 }
 
 const initialState: AuthState = {

@@ -97,9 +97,10 @@ def pdf_parser(pdf_bytes: bytes, custom_fields=None):
             if link is not None:
                 resume_string = _personal_info_replace(resume_string, link, 'github')
 
-    for field in custom_fields:
-        for key, value in field.items():
-            resume_string = _personal_info_replace(resume_string, value, key)
+    if custom_fields is not None:
+        for field in custom_fields:
+            for key, value in field.items():
+                resume_string = _personal_info_replace(resume_string, value, key)
 
     gemini_prompt = f'''
                     You are a resume analyzer. I am providing you text content extracted from resume.

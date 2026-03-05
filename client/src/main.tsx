@@ -15,14 +15,15 @@ import PrivateRoute from './components/PrivateRoute';
 import LoginPage from './pages/LoginPage';
 import SignUpPage from './pages/SignupPage';
 import AccountActivatedPage from './pages/AccountActivatedPage';
-// import NotFoundPage from './pages/NotFoundPage.jsx';
+import NotFoundPage from './pages/NotFoundPage';
 import HomePage from './pages/HomePage';
-// import UploadCVPage from './pages/UploadCVPage.jsx';
-// import AccountPage from './pages/AccountPage.jsx';
+import UploadCVPage from './pages/UploadCVPage';
+import AccountPage from './pages/AccountPage';
 import ForgotPasswordPage from './pages/ForgotPasswordPage';
-// import DeleteAccountPage from './pages/DeleteAccountPage.jsx';
-// import ProfilePage from './pages/ProfilePage.jsx';
-// import PracticePage from './pages/PracticePage.jsx';
+import DeleteAccountPage from './pages/DeleteAccountPage';
+import ProfilePage from './pages/ProfilePage';
+import PracticePage from './pages/PracticePage';
+
 
 const router = createBrowserRouter(
     createRoutesFromElements(
@@ -35,14 +36,14 @@ const router = createBrowserRouter(
 
             <Route path='' element={<PrivateRoute />}>
                 <Route path='/home' element={<HomePage />}></Route>
-                {/* <Route path='/upload' element={<UploadCVPage />} /> */}
-                {/* <Route path='/account' element={<AccountPage />} /> */}
-                {/* <Route path='/profile' element={<ProfilePage />} /> */}
-                {/* <Route path='/delete' element={<DeleteAccountPage />} /> */}
-                {/* <Route path='/practice' element={<PracticePage />} /> */}
+                <Route path='/upload' element={<UploadCVPage />} />
+                <Route path='/account' element={<AccountPage />} />
+                <Route path='/profile' element={<ProfilePage />} />
+                <Route path='/delete' element={<DeleteAccountPage />} />
+                <Route path='/practice' element={<PracticePage />} />
             </Route>
 
-            {/* <Route path='*' element={<NotFoundPage />} /> */}
+            <Route path='*' element={<NotFoundPage />} />
         </Route>
     )
 );

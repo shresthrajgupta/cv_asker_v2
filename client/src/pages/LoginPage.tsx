@@ -112,7 +112,7 @@ const LoginPage = () => {
 
     return (
         (userAccountInfoFetching || getAccessTokenLoading) ? <Loading size={70} /> :
-            <div className={`flex flex-col items-center justify-center mx-4 py-6 md:w-[400px] rounded-xl ${contentBackgroundColor[themeMode]} shadow-lg`}>
+            <div className={`flex flex-col items-center justify-center mx-4 py-6 md:w-100 rounded-xl ${contentBackgroundColor[themeMode]} shadow-lg`}>
                 <div className="flex flex-col items-center px-6">
                     <img src={logo} alt='Logo' className="w-32" />
                     <p className={`text-xl md:text-2xl ${sectionTitleTheme[themeMode]} select-none`}>Log in to CV-Asker</p>

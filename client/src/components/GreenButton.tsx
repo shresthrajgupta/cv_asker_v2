@@ -9,14 +9,14 @@ import { buttonColorTheme } from "../utils/themeUtil";
 
 interface GreenButtonProps {
     text: string | ReactElement<typeof Loading>;
-    type: "submit";
+    type: "submit" | "button";
     onclick?: MouseEventHandler<HTMLButtonElement>;
-    disabled: boolean;
-    additionalClasses: string;
+    disabled?: boolean;
+    additionalClasses?: string;
 };
 
 
-const GreenButton = ({ text, type, onclick, disabled, additionalClasses = "", }: GreenButtonProps) => {
+const GreenButton = ({ text, type, onclick, disabled = false, additionalClasses = "", }: GreenButtonProps) => {
     const { themeMode } = useAppSelector((state) => state.theme);
 
     return (

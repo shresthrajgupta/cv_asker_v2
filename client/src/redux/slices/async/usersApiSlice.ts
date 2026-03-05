@@ -28,11 +28,13 @@ export interface LoginErrorResponse {
     detail?: string
 };
 
+
 interface LogoutSuccessResponse {
     message: string;
 }
 
-export interface userAccountInfoSuccessResponse {
+
+export interface UserAccountInfoSuccessResponse {
     id: number;
     name: string;
     email: string;
@@ -40,6 +42,12 @@ export interface userAccountInfoSuccessResponse {
 }
 
 
+interface UpdateUserAccountInfoSuccessResponse {
+    id: number;
+    name: string;
+    email: string;
+    is_active: boolean;
+}
 
 
 interface GetAccessTokenSuccessResponse {
@@ -51,17 +59,6 @@ export interface GetAccessTokenErrorResponse {
     detail?: string;
     code?: string;
 }
-
-
-// interface UpdateUserRequest {
-//     name: string;
-//     accessToken: string;
-// }
-
-// interface DeleteUserRequest {
-//     password: string;
-//     accessToken: string;
-// }
 
 
 export const usersApiSlice = apiSlice.injectEndpoints({
@@ -122,7 +119,7 @@ export const usersApiSlice = apiSlice.injectEndpoints({
         }),
 
         // implemented
-        userAccountInfo: builder.query<userAccountInfoSuccessResponse, string>({
+        userAccountInfo: builder.query<UserAccountInfoSuccessResponse, string>({
             query: (accessToken) => ({
                 url: "/api/auth/users/me/",
                 method: "GET",
@@ -133,25 +130,26 @@ export const usersApiSlice = apiSlice.injectEndpoints({
             providesTags: ["UserAccount"],
         }),
 
-        // updateUserAccountInfo: builder.mutation<void, UpdateUserRequest>({
-        //     query: ({ name, accessToken }) => ({
-        //         url: "/api/auth/users/me/",
-        //         method: "PATCH",
-        //         body: { name },
-        //         headers: { Authorization: `JWT ${accessToken}` },
-        //         credentials: "include",
-        //     }),
-        // }),
+        updateUserAccountInfo: builder.mutation<UpdateUserAccountInfoSuccessResponse, { name: string; accessToken: string }>({
+            query: ({ name, accessToken }) => ({
+                url: "/api/auth/users/me/",
+                method: "PATCH",
+                body: { name },
+                headers: { Authorization: `JWT ${accessToken}` },
+                credentials: "include",
+            }),
+        }),
 
-        // deleteUserAccount: builder.mutation<void, DeleteUserRequest>({
-        //     query: ({ password, accessToken }) => ({
-        //         url: "/api/auth/users/me/",
-        //         method: "DELETE",
-        //         body: { current_password: password },
-        //         headers: { Authorization: `JWT ${accessToken}` },
-        //         credentials: "include",
-        //     }),
-        // }),
+        // implemented
+        deleteUserAccount: builder.mutation<void, { password: string, accessToken: string }>({
+            query: ({ password, accessToken }) => ({
+                url: "/api/auth/users/me/",
+                method: "DELETE",
+                body: { current_password: password },
+                headers: { Authorization: `JWT ${accessToken}` },
+                credentials: "include",
+            }),
+        }),
 
         // implemented
         getAccessToken: builder.mutation<GetAccessTokenSuccessResponse, void>({
@@ -173,7 +171,7 @@ export const
         useResetPasswordMutation,
         useSetNewPasswordMutation,
         useLazyUserAccountInfoQuery,
-        // useUpdateUserAccountInfoMutation,
-        // useDeleteUserAccountMutation,
+        useUpdateUserAccountInfoMutation,
+        useDeleteUserAccountMutation,
         useGetAccessTokenMutation,
     } = usersApiSlice;
