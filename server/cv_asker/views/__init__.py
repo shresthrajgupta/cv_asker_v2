@@ -9,6 +9,7 @@ from .refresh_token_view import CookieTokenRefreshView
 from .logout_token_view import CustomTokenDeleteView
 from .download_sqlite_view import DownloadDatabaseView
 from .react_view import FrontendAppView
+from .custom_signup_view import CustomSignUpView
 
 __all__ = [
     'PDFUploadView',
@@ -22,4 +23,5 @@ __all__ = [
     'FrontendAppView',
     'CustomTokenDeleteView',
     'DownloadDatabaseView',
+    'CustomSignUpView',
 ]

@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 
-import { useAppSelector } from "../hooks/hooks";
+import { useAppSelector, useAppDispatch } from "../hooks/hooks";
 
 import Sidebar from "../components/Sidebar";
 import MainContainer from "../components/MainContainer";
@@ -17,6 +17,7 @@ import { contentBackgroundColor, sectionTitleTheme, textInputBackgroundColorThem
 
 const DeleteAccountPage = () => {
     const navigate = useNavigate();
+    const dispatch = useAppDispatch();
 
     const [password, setPassword] = useState<string>("");
     const [isPasswordFilled, setIsPasswordFilled] = useState<boolean>(false);
@@ -28,24 +29,31 @@ const DeleteAccountPage = () => {
 
     const deleteAccount = async () => {
         if (password.length === 0) {
-            toast.error("Please type valid password");
+            toast.error("Please type valid password",
+                { style: { background: toastBackgroundTheme[themeMode], color: toastTextTheme[themeMode] } }
+            );
+            return;
+        }
+
+        if (!accessToken) {
+            toast.error("Invalid credentials",
+                { style: { background: toastBackgroundTheme[themeMode], color: toastTextTheme[themeMode] } }
+            );
             return;
         }
 
         try {
-            if (!accessToken) {
-                toast.error("Invalid credentials",
-                    { style: { background: toastBackgroundTheme[themeMode], color: toastTextTheme[themeMode] } }
-                );
-                return;
-            }
-
             await deleteUserAccount({ password, accessToken }).unwrap();
 
             toast.success("Account deleted successfully",
-                { style: { background: toastBackgroundTheme[themeMode], color: toastTextTheme[themeMode] } }
+                {
+                    style: { background: toastBackgroundTheme[themeMode], color: toastTextTheme[themeMode] },
+                    onClose: () => {
+                        dispatch({ type: "RESET_ALL" as const });
+                        navigate('/login');
+                    }
+                }
             );
-            navigate('/login');
         } catch (err) {
             console.log(err);
             toast.error("Error deleting account, Please try again",

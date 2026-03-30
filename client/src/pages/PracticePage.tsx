@@ -197,8 +197,8 @@ const PracticePage = () => {
 
     useEffect(() => {
         if (!skillToAsk) {
-            toast.error("No skill to be asked selected",
-                { style: { background: toastBackgroundTheme[themeMode], color: toastTextTheme[themeMode] } });
+            // toast.error("No skill to be asked selected",
+            //     { style: { background: toastBackgroundTheme[themeMode], color: toastTextTheme[themeMode] } });
             return;
         }
 
@@ -210,16 +210,21 @@ const PracticePage = () => {
     useEffect(() => {
         const fetchData = async () => {
             if (!accessToken) {
-                toast.error("Invalid credentials",
-                    { style: { background: toastBackgroundTheme[themeMode], color: toastTextTheme[themeMode] } });
+                // toast.error("Invalid credentials",
+                //     { style: { background: toastBackgroundTheme[themeMode], color: toastTextTheme[themeMode] } });
                 return;
             }
 
             try {
                 const res = await getProfile(accessToken).unwrap();
                 setSkills(res.skills);
-            } catch (err) {
-                toast.error("Error fetching data, Please try again later",
+            } catch (err: unknown) {
+                if (typeof err === "object" && err !== null && "status" in err && err.status === 404) {
+                    toast.error("No profile found, Please upload CV or provide skills manually",
+                        { style: { background: toastBackgroundTheme[themeMode], color: toastTextTheme[themeMode] } });
+                    return;
+                }
+                toast.error("Error fetching profile, Please try again later",
                     { style: { background: toastBackgroundTheme[themeMode], color: toastTextTheme[themeMode] } });
                 console.log(err);
             }

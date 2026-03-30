@@ -21,11 +21,11 @@ type SidebarElement = {
 };
 
 const sidebarElements: SidebarElement[] = [
-    {
-        icon: <Home size={22} />,
-        text: "Home",
-        to: "/home"
-    },
+    // {
+    //     icon: <Home size={22} />,
+    //     text: "Home",
+    //     to: "/home"
+    // },
     {
         icon: <ScrollText size={22} />,
         text: "Upload Resume",

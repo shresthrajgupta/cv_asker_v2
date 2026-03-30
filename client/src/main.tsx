@@ -35,7 +35,8 @@ const router = createBrowserRouter(
             <Route path='/password-reset/*' element={<ForgotPasswordPage />} />
 
             <Route path='' element={<PrivateRoute />}>
-                <Route path='/home' element={<HomePage />}></Route>
+                {/* <Route path='/home' element={<HomePage />}></Route> */}
+                <Route path='/home' element={<UploadCVPage />}></Route>
                 <Route path='/upload' element={<UploadCVPage />} />
                 <Route path='/account' element={<AccountPage />} />
                 <Route path='/profile' element={<ProfilePage />} />

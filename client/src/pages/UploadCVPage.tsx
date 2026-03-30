@@ -164,9 +164,9 @@ const UploadCVPage = () => {
     useEffect(() => {
         const finishProfile = async () => {
             if (!profile || profile.skills.length === 0) {
-                toast.error("Please provide at least 1 skill",
-                    { style: { background: toastBackgroundTheme[themeMode], color: toastTextTheme[themeMode] } }
-                );
+                // toast.error("Please provide at least 1 skill",
+                //     { style: { background: toastBackgroundTheme[themeMode], color: toastTextTheme[themeMode] } }
+                // );
                 return;
             }
 

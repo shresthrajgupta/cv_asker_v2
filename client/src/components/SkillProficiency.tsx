@@ -130,9 +130,9 @@ const SkillProficiency = ({ profile, setProfile, disableSubmitBtn, isGetProfileP
             });
         }
         else {
-            toast.error("Job profile not present",
-                { style: { background: toastBackgroundTheme[themeMode], color: toastTextTheme[themeMode] } }
-            );
+            // toast.error("Job profile not present",
+            //     { style: { background: toastBackgroundTheme[themeMode], color: toastTextTheme[themeMode] } }
+            // );
             return;
         }
     }, [profile]);

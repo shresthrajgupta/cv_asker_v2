@@ -14,16 +14,9 @@ import { useLazyGetProfileQuery, usePatchProfileMutation } from "../redux/slices
 
 import { toastBackgroundTheme, toastTextTheme } from "../utils/themeUtil";
 
-import { type Skill, type Profile } from "../redux/slices/async/profileApiSlice";
-
-interface ProfileModified {
-    "Skills": Skill[];
-    "jobProfile": string;
-    "Experience Level": number;
-}
+import { type Profile } from "../redux/slices/async/profileApiSlice";
 
 const ProfilePage = () => {
-    const [profile, setProfile] = useState<ProfileModified | null>(null);
     const [profileModified, setProfileModified] = useState<Profile | null>(null);
     const [buttonClicked, setButtonClicked] = useState(false);
 
@@ -38,9 +31,9 @@ const ProfilePage = () => {
             if (accessToken !== "") {
                 try {
                     if (!accessToken) {
-                        toast.error("Invalid credentials",
-                            { style: { background: toastBackgroundTheme[themeMode], color: toastTextTheme[themeMode] } }
-                        );
+                        // toast.error("Invalid credentials",
+                        //     { style: { background: toastBackgroundTheme[themeMode], color: toastTextTheme[themeMode] } }
+                        // );
                         return;
                     }
 
@@ -55,14 +48,15 @@ const ProfilePage = () => {
 
     useEffect(() => {
         if (!getProfileData) {
-            toast.error("Error loading profile",
-                { style: { background: toastBackgroundTheme[themeMode], color: toastTextTheme[themeMode] } }
-            );
+            // toast.error("Error loading profile",
+            //     { style: { background: toastBackgroundTheme[themeMode], color: toastTextTheme[themeMode] } }
+            // );
             return;
         }
 
         if (getProfileData.skills?.length > 0) {
-            setProfile({ "Experience Level": getProfileData.experience_years, Skills: getProfileData.skills, jobProfile: getProfileData.job_profile });
+            // setProfile({ "Experience Level": getProfileData.experience_years, Skills: getProfileData.skills, jobProfile: getProfileData.job_profile });
+            setProfileModified({ experience_years: getProfileData.experience_years, skills: getProfileData.skills, job_profile: getProfileData.job_profile });
         }
     }, [getProfileData]);
 
@@ -70,10 +64,10 @@ const ProfilePage = () => {
         const updateProfile = async () => {
             if (buttonClicked) {
                 try {
-                    if (!profile) {
-                        toast.error("No profile present",
-                            { style: { background: toastBackgroundTheme[themeMode], color: toastTextTheme[themeMode] } }
-                        );
+                    if (!profileModified) {
+                        // toast.error("No profile present",
+                        //     { style: { background: toastBackgroundTheme[themeMode], color: toastTextTheme[themeMode] } }
+                        // );
                         return;
                     }
 
@@ -84,27 +78,7 @@ const ProfilePage = () => {
                         return;
                     }
 
-                    setProfileModified({ skills: profile.Skills, experience_years: profile["Experience Level"], job_profile: profile.jobProfile });
-
-                    if (!profileModified) {
-                        toast.error("No profile present",
-                            { style: { background: toastBackgroundTheme[themeMode], color: toastTextTheme[themeMode] } }
-                        );
-
-                        return;
-                    }
-
-                    const res = await patchProfile({ profile: profileModified, accessToken });
-                    if (res.data && res.data.message === "Profile updated") {
-                        toast.success("Profile updated successfully",
-                            { style: { background: toastBackgroundTheme[themeMode], color: toastTextTheme[themeMode] } }
-                        )
-                    }
-                    else {
-                        toast.error("Error updating profile",
-                            { style: { background: toastBackgroundTheme[themeMode], color: toastTextTheme[themeMode] } }
-                        );
-                    }
+                    setProfileModified({ skills: profileModified.skills, experience_years: profileModified.experience_years, job_profile: profileModified.job_profile });
                 } catch (err) {
                     console.log(err);
                 }
@@ -115,6 +89,48 @@ const ProfilePage = () => {
         updateProfile();
     }, [buttonClicked]);
 
+    useEffect(() => {
+        const updateAndPatchProfile = async () => {
+            if (!buttonClicked) return;
+
+            if (!profileModified) {
+                // toast.error("No profile present",
+                //     { style: { background: toastBackgroundTheme[themeMode], color: toastTextTheme[themeMode] } }
+                // );
+                return;
+            }
+
+            if (!accessToken) {
+                toast.error("Invalid credentials",
+                    { style: { background: toastBackgroundTheme[themeMode], color: toastTextTheme[themeMode] } }
+                );
+                return;
+            }
+
+            try {
+                const res = await patchProfile({ profile: profileModified, accessToken });
+
+                if (res.data && res.data.message === "Profile updated") {
+                    toast.success("Profile updated successfully",
+                        { style: { background: toastBackgroundTheme[themeMode], color: toastTextTheme[themeMode] } }
+                    )
+                }
+                else {
+                    toast.error("Error updating profile",
+                        { style: { background: toastBackgroundTheme[themeMode], color: toastTextTheme[themeMode] } }
+                    );
+                }
+            }
+            catch (err) {
+                console.log(err);
+            }
+
+            setButtonClicked(false);
+        }
+
+        updateAndPatchProfile();
+    }, [buttonClicked, profileModified]);
+
     return (
         <MainContainer>
             <Sidebar />
@@ -124,7 +140,7 @@ const ProfilePage = () => {
             <ContentContainer>
                 {
                     getProfileLoading ? <Loading size={70} /> :
-                        <SkillProficiency profile={profileModified} setProfile={setProfile} disableSubmitBtn={patchProfileLoading} isGetProfilePage={true} setButtonClicked={setButtonClicked} />
+                        <SkillProficiency profile={profileModified} setProfile={setProfileModified} disableSubmitBtn={patchProfileLoading} isGetProfilePage={true} setButtonClicked={setButtonClicked} />
                 }
             </ContentContainer>
         </MainContainer>

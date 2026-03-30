@@ -1,5 +1,4 @@
-// typescript applied
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { toast } from "react-toastify";
 
@@ -14,20 +13,29 @@ import { isFetchBaseQueryError } from '../utils/errorUtil';
 
 
 function isVerifyAccountErrorResponse(data: unknown): data is VerifyAccountErrorResponse {
-    return (typeof data === "object" && data !== null && ("uid" in data || "token" in data));
+    return (typeof data === "object" && data !== null && ("uid" in data || "token" in data || "detail" in data));
 }
 
 const AccountActivatedPage = () => {
+    const { uid, token } = useParams<{ uid: string; token: string; }>();
+
     const [activated, setActivated] = useState<boolean>(false);
+
+    const hasRanOnce = useRef<boolean>(false);
 
     const { themeMode } = useAppSelector((state) => state.theme);
 
     const [verifyAccount, { isLoading: verifyAccountLoading }] = useVerifyAccountMutation();
 
     useEffect(() => {
+        if (hasRanOnce.current) {
+            return;
+        }
+
+        hasRanOnce.current = true;
+
         const verify = async () => {
             try {
-                const { uid, token } = useParams<{ uid: string; token: string; }>();
 
                 if (uid && token) {
                     await verifyAccount({ uid, token }).unwrap();
@@ -40,7 +48,7 @@ const AccountActivatedPage = () => {
             } catch (err) {
                 if (isFetchBaseQueryError(err)) {
                     if (isVerifyAccountErrorResponse(err.data)) {
-                        toast.error("Invalid verification credentials", { style: { background: toastBackgroundTheme[themeMode], color: toastTextTheme[themeMode] } });
+                        toast.error("Invalid verification credentials, Please re-register", { style: { background: toastBackgroundTheme[themeMode], color: toastTextTheme[themeMode] } });
                         setActivated(false);
                         return;
                     }

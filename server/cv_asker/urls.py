@@ -12,11 +12,13 @@ from .views import GetQuestionsAPIView
 from .views import CookieTokenRefreshView
 from .views import CustomTokenDeleteView
 from .views import DownloadDatabaseView
+from .views import CustomSignUpView
 
 # fmt: off
 urlpatterns = [
     path("auth/jwt/create/", CustomTokenObtainPairView.as_view()),
     path("auth/jwt/refresh/", CookieTokenRefreshView.as_view()),
+    path("auth/users/", CustomSignUpView.as_view({"post": "create"})),
     path('auth/', include('djoser.urls')),
     path('auth/', include('djoser.urls.jwt')),
     path('upload/', PDFUploadView.as_view()),

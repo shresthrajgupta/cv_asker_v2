@@ -17,8 +17,7 @@ def _call_gemini(gemini_prompt):
 def generate_question(skill, proficiency):
     gemini_prompt_old = f'''
                     You are an interviewer. You have been provided skill name and its proficiency level out of 10 by the candidate.
-                    You have to ask the candidate questions on the given skill and their proficiency (1 being absolute beginner to 10 being extremenly experienced) in the form of mcq with 4 options.
-
+                    You have to ask the candidate questions on the given skill and their proficiency (1 being absolute beginner to 10 being extremenly experienced) in the form of mcq with 4 options.                    
                     Generate 50 questions in the form of an array containing 100 elements each being in the format [question,option_a,option_b,option_c,option_d,correct option(enum[a,b,c,d])].
 
                     Do not give anything in response just the desired array in the format provided above.
@@ -35,6 +34,7 @@ def generate_question(skill, proficiency):
 
                     Your task:
                     - Generate exactly 50 multiple-choice questions (MCQs) about the given skill.
+                    - You have to ask hard questions which requires in-depth knowledge and calculation and not just textbook based knowledge
                     - Questions must be **tailored to the provided proficiency level**, scaling **exponentially** in depth and difficulty:
                       - A small increase in proficiency (e.g., 6 → 7) should represent a **significant jump** in question complexity.
                       - Higher proficiency levels should test **conceptual reasoning, problem-solving, and practical application**, not just factual recall.

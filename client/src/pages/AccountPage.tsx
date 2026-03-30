@@ -80,9 +80,9 @@ export default function AccountPage() {
 
     useEffect(() => {
         if (!userInfo) {
-            toast.error("No user info present",
-                { style: { background: toastBackgroundTheme[themeMode], color: toastTextTheme[themeMode] } }
-            );
+            // toast.error("No user info present",
+            //     { style: { background: toastBackgroundTheme[themeMode], color: toastTextTheme[themeMode] } }
+            // );
             return;
         }
 

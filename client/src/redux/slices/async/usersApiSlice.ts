@@ -16,6 +16,7 @@ export interface SignupErrorResponse {
 export interface VerifyAccountErrorResponse {
     uid?: string[];
     token?: string[];
+    detail?: string;
 }
 
 
