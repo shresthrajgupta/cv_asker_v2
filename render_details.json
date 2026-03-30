@@ -1,0 +1,23 @@
+{
+    "Name": "cv_asker_v2",
+    "Region": "Oregon (US West)",
+    "Instance Type": "Free 0.1 CPU 512 MB",
+    "Repository": "https://github.com/shresthrajgupta/cv_asker_v2",
+    "Branch": "main",
+    "Git Credentials": "shxxxxx9@gmail.com (you)",
+    "Build Command": "pip install -r requirements.txt && cd client && npm install && npm run build && cd .. && cd server && python manage.py collectstatic --noinput && cd ..",
+    "Start Command": "cd server && gunicorn server.wsgi:application --bind 0.0.0.0:8000",
+    "Auto-Deploy": "On Commit",
+    "Pull Request Previews": "Off",
+    "Service Notifications": "Use workspace default (Only failure notidications)",
+    "Preview Environment Notifications": "Use account default (Disabled)",
+    "ENVIRONMENT VARIABLES": {
+        "DEBUG_MODE": "false",
+        "EMAIL_USER": "shxxxxx9@gmail.com",
+        "EMAIL_PASS": "",
+        "FRONTEND_URL": "https://cv-asker-v2.onrender.com",
+        "GEMINI_API": "",
+        "RENDER": "true",
+        "SECRET_KEY": "django-insecure-wgkt!r+c_i1+)0yi_2md*7(kgew43=hn0)k(r&_r_2=chtv@=8"
+    }
+}
