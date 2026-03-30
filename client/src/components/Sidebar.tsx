@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { GraduationCap, Home, ScrollText, User } from "lucide-react";
+import { GraduationCap, ScrollText, User } from "lucide-react";
 import { toast } from "react-toastify";
 
 import { useAppSelector, useAppDispatch } from "../hooks/hooks";

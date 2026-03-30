@@ -16,7 +16,6 @@ import LoginPage from './pages/LoginPage';
 import SignUpPage from './pages/SignupPage';
 import AccountActivatedPage from './pages/AccountActivatedPage';
 import NotFoundPage from './pages/NotFoundPage';
-import HomePage from './pages/HomePage';
 import UploadCVPage from './pages/UploadCVPage';
 import AccountPage from './pages/AccountPage';
 import ForgotPasswordPage from './pages/ForgotPasswordPage';
